@@ -1,1 +1,1 @@
-front page de la resolución del TP0
+Programa muy sencillo donde se imprime un "Hola Mundo" por pantalla
