@@ -1,0 +1,3920 @@
+Terminals unused in grammar
+
+   PRESERVADA
+   MODALIDAD
+   PUNTUACION
+   PERTENECE
+   TYPEDEF
+   SIZEOF
+   SWITCH
+   CASE
+   BREAK
+   CONTINUE
+   CONTROLOTRA
+   OPERADOR
+   CONDICION
+   DEFAULT
+
+
+Rules useless in parser due to conflicts
+
+   86 $@2: /* vacío */
+
+
+Estado 1 conflictos: 1 reducción(ones)/reducción(ones)
+Estado 3 conflictos: 1 desplazamiento(s)/reducción(ones)
+Estado 15 conflictos: 1 reducción(ones)/reducción(ones)
+Estado 38 conflictos: 1 desplazamiento(s)/reducción(ones)
+Estado 56 conflictos: 2 desplazamiento(s)/reducción(ones)
+Estado 57 conflictos: 2 desplazamiento(s)/reducción(ones)
+Estado 58 conflictos: 2 desplazamiento(s)/reducción(ones)
+Estado 59 conflictos: 1 reducción(ones)/reducción(ones)
+Estado 82 conflictos: 2 desplazamiento(s)/reducción(ones)
+Estado 92 conflictos: 1 reducción(ones)/reducción(ones)
+Estado 148 conflictos: 1 reducción(ones)/reducción(ones)
+Estado 149 conflictos: 1 reducción(ones)/reducción(ones)
+Estado 150 conflictos: 1 reducción(ones)/reducción(ones)
+Estado 161 conflictos: 1 reducción(ones)/reducción(ones)
+
+
+Gramática
+
+    0 $accept: input $end
+
+    1 input: /* vacío */
+    2      | input line
+
+    3 line: '\n'
+    4     | sentencia
+    5     | sentencia '\n'
+    6     | error
+    7     | error ';'
+
+    8 expresion: expresionAsignacion
+
+    9 expresionAsignacion: expresionCondicional
+   10                    | expresionUnaria operacionAsignacion expresionAsignacion
+
+   11 operacionAsignacion: '='
+   12                    | SUMADIRECTA
+   13                    | RESTADIRECTA
+
+   14 expresionCondicional: expresionOr
+   15                     | expresionOr '?' expresion ':' expresion
+
+   16 expresionOr: expresionAnd
+   17            | expresionOr OR expresionAnd
+
+   18 expresionAnd: expresionIgualdad
+   19             | expresionAnd AND expresionIgualdad
+
+   20 expresionIgualdad: expresionRelacional
+   21                  | expresionIgualdad operadorComparacion expresionRelacional
+
+   22 operadorComparacion: IGUALDAD DESIGUALDAD
+
+   23 expresionRelacional: expresionAditiva
+   24                    | expresionRelacional operadorRelacional expresionAditiva
+
+   25 operadorRelacional: '>'
+   26                   | '<'
+   27                   | MENORIGUAL
+   28                   | MAYORIGUAL
+
+   29 expresionAditiva: expresionMultiplicativa
+   30                 | expresionAditiva '+' expresionMultiplicativa
+   31                 | expresionAditiva '-' expresionMultiplicativa
+
+   32 expresionMultiplicativa: expresionUnaria
+   33                        | expresionMultiplicativa '*' expresionUnaria
+   34                        | expresionMultiplicativa '/' expresionUnaria
+
+   35 expresionUnaria: expresionPostfijo
+   36                | expresionUnaria INCREMENTO
+   37                | expresionUnaria DECREMENTO
+   38                | operadorUnario expresionUnaria
+   39                | '-' expresionUnaria
+   40                | '+' expresionUnaria
+   41                | '*' expresionUnaria
+
+   42 operadorUnario: '&'
+   43               | '!'
+
+   44 expresionPostfijo: expresionPrimaria
+   45                  | expresionPostfijo '[' expresion ']'
+   46                  | expresionPostfijo '(' listaDeArgumentos ')'
+
+   47 listaDeArgumentos: argumento
+   48                  | listaDeArgumentos ',' argumento
+
+   49 argumento: expresion
+
+   50 expresionPrimaria: CONSTANTES
+   51                  | IDENTIFICADOR
+   52                  | LITERAL_CADENA
+
+   53 declaracion: declaracionVariable ';'
+   54            | declaracionAsignacion ';'
+   55            | declaracionFuncion ';'
+
+   56 declaracionFuncion: TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')'
+   57                   | VOID IDENTIFICADOR '(' listaDeParametros ')'
+
+   58 definicionFuncion: TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   59                  | VOID IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+
+   60 listaDeParametros: /* vacío */
+   61                  | parametro
+   62                  | listaDeParametros ',' parametro
+
+   63 parametro: TIPOS_DE_DATOS IDENTIFICADOR
+
+   64 declaracionVariable: TIPOS_DE_DATOS listaDeVariables
+
+   65 declaracionAsignacion: TIPOS_DE_DATOS listaDeVariablesAsignacion
+
+   66 listaDeVariables: variable
+   67                 | variable ',' listaDeVariables
+
+   68 listaDeVariablesAsignacion: variableAsignacion
+   69                           | variableAsignacion ',' listaDeVariablesAsignacion
+
+   70 variable: IDENTIFICADOR
+
+   71 variableAsignacion: IDENTIFICADOR '=' expresionAsignacion
+
+   72 sentenciaCompuesta: '{' listaCompuesta '}'
+
+   73 listaCompuesta: /* vacío */
+   74               | line listaCompuesta
+
+   75 sentencia: sentenciaCompuesta
+   76          | sentenciaExpresion
+   77          | sentenciaSeleccion
+   78          | sentenciaIteracion
+   79          | sentenciaSalto
+   80          | declaracion
+   81          | definicionFuncion
+
+   82 sentenciaExpresion: ';'
+   83                   | expresion ';'
+
+   84 $@1: /* vacío */
+
+   85 sentenciaSeleccion: $@1 IF '(' expresion ')' sentencia ELSE sentencia
+
+   86 $@2: /* vacío */
+
+   87 sentenciaSeleccion: $@2 IF '(' expresion ')' sentencia
+
+   88 $@3: /* vacío */
+
+   89 sentenciaIteracion: $@3 WHILE '(' expresion ')' sentencia
+
+   90 $@4: /* vacío */
+
+   91 sentenciaIteracion: $@4 DO sentencia WHILE '(' expresion ')' ';'
+
+   92 $@5: /* vacío */
+
+   93 sentenciaIteracion: $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+
+   94 sentenciaSalto: RETURN expresion ';'
+
+   95 expresionOP: /* vacío */
+   96            | expresion
+
+
+Terminales con las reglas donde aparecen
+
+$end (0) 0
+'\n' (10) 3 5
+'!' (33) 43
+'&' (38) 42
+'(' (40) 46 56 57 58 59 85 87 89 91 93
+')' (41) 46 56 57 58 59 85 87 89 91 93
+'*' (42) 33 41
+'+' (43) 30 40
+',' (44) 48 62 67 69
+'-' (45) 31 39
+'/' (47) 34
+':' (58) 15
+';' (59) 7 53 54 55 82 83 91 93 94
+'<' (60) 26
+'=' (61) 11 71
+'>' (62) 25
+'?' (63) 15
+'[' (91) 45
+']' (93) 45
+'{' (123) 72
+'}' (125) 72
+error (256) 6 7
+CONSTANTES (258) 50
+LITERAL_CADENA (259) 52
+IDENTIFICADOR (260) 51 56 57 58 59 63 70 71
+TIPOS_DE_DATOS (261) 56 58 63 64 65
+PRESERVADA (262)
+MODALIDAD (263)
+AND (264) 19
+PUNTUACION (265)
+INCREMENTO (266) 36
+DECREMENTO (267) 37
+SUMADIRECTA (268) 12
+RESTADIRECTA (269) 13
+OR (270) 17
+VOID (271) 57 59
+MAYORIGUAL (272) 28
+MENORIGUAL (273) 27
+PERTENECE (274)
+DESIGUALDAD (275) 22
+IGUALDAD (276) 22
+RETURN (277) 94
+IF (278) 85 87
+DO (279) 91
+WHILE (280) 89 91
+ELSE (281) 85
+FOR (282) 93
+TYPEDEF (283)
+SIZEOF (284)
+SWITCH (285)
+CASE (286)
+BREAK (287)
+CONTINUE (288)
+CONTROLOTRA (289)
+OPERADOR (290)
+CONDICION (291)
+DEFAULT (292)
+NEG (293)
+POS (294)
+PUNT (295)
+
+
+No terminales con las reglas donde aparecen
+
+$accept (61)
+    en la izquierda: 0
+input (62)
+    en la izquierda: 1 2, en la derecha: 0 2
+line (63)
+    en la izquierda: 3 4 5 6 7, en la derecha: 2 74
+expresion (64)
+    en la izquierda: 8, en la derecha: 15 45 49 83 85 87 89 91 94 96
+expresionAsignacion (65)
+    en la izquierda: 9 10, en la derecha: 8 10 71
+operacionAsignacion (66)
+    en la izquierda: 11 12 13, en la derecha: 10
+expresionCondicional (67)
+    en la izquierda: 14 15, en la derecha: 9
+expresionOr (68)
+    en la izquierda: 16 17, en la derecha: 14 15 17
+expresionAnd (69)
+    en la izquierda: 18 19, en la derecha: 16 17 19
+expresionIgualdad (70)
+    en la izquierda: 20 21, en la derecha: 18 19 21
+operadorComparacion (71)
+    en la izquierda: 22, en la derecha: 21
+expresionRelacional (72)
+    en la izquierda: 23 24, en la derecha: 20 21 24
+operadorRelacional (73)
+    en la izquierda: 25 26 27 28, en la derecha: 24
+expresionAditiva (74)
+    en la izquierda: 29 30 31, en la derecha: 23 24 30 31
+expresionMultiplicativa (75)
+    en la izquierda: 32 33 34, en la derecha: 29 30 31 33 34
+expresionUnaria (76)
+    en la izquierda: 35 36 37 38 39 40 41, en la derecha: 10 32 33
+    34 36 37 38 39 40 41
+operadorUnario (77)
+    en la izquierda: 42 43, en la derecha: 38
+expresionPostfijo (78)
+    en la izquierda: 44 45 46, en la derecha: 35 45 46
+listaDeArgumentos (79)
+    en la izquierda: 47 48, en la derecha: 46 48
+argumento (80)
+    en la izquierda: 49, en la derecha: 47 48
+expresionPrimaria (81)
+    en la izquierda: 50 51 52, en la derecha: 44
+declaracion (82)
+    en la izquierda: 53 54 55, en la derecha: 80
+declaracionFuncion (83)
+    en la izquierda: 56 57, en la derecha: 55
+definicionFuncion (84)
+    en la izquierda: 58 59, en la derecha: 81
+listaDeParametros (85)
+    en la izquierda: 60 61 62, en la derecha: 56 57 58 59 62
+parametro (86)
+    en la izquierda: 63, en la derecha: 61 62
+declaracionVariable (87)
+    en la izquierda: 64, en la derecha: 53
+declaracionAsignacion (88)
+    en la izquierda: 65, en la derecha: 54
+listaDeVariables (89)
+    en la izquierda: 66 67, en la derecha: 64 67
+listaDeVariablesAsignacion (90)
+    en la izquierda: 68 69, en la derecha: 65 69
+variable (91)
+    en la izquierda: 70, en la derecha: 66 67
+variableAsignacion (92)
+    en la izquierda: 71, en la derecha: 68 69
+sentenciaCompuesta (93)
+    en la izquierda: 72, en la derecha: 58 59 75 93
+listaCompuesta (94)
+    en la izquierda: 73 74, en la derecha: 72 74
+sentencia (95)
+    en la izquierda: 75 76 77 78 79 80 81, en la derecha: 4 5 85 87
+    89 91
+sentenciaExpresion (96)
+    en la izquierda: 82 83, en la derecha: 76
+sentenciaSeleccion (97)
+    en la izquierda: 85 87, en la derecha: 77
+$@1 (98)
+    en la izquierda: 84, en la derecha: 85
+$@2 (99)
+    en la izquierda: 86, en la derecha: 87
+sentenciaIteracion (100)
+    en la izquierda: 89 91 93, en la derecha: 78
+$@3 (101)
+    en la izquierda: 88, en la derecha: 89
+$@4 (102)
+    en la izquierda: 90, en la derecha: 91
+$@5 (103)
+    en la izquierda: 92, en la derecha: 93
+sentenciaSalto (104)
+    en la izquierda: 94, en la derecha: 79
+expresionOP (105)
+    en la izquierda: 95 96, en la derecha: 93
+
+
+estado 0
+
+    0 $accept: . input $end
+    1 input: .
+    2      | . input line
+
+    $default  reduce usando la regla 1 (input)
+
+    input  ir al estado 1
+
+
+estado 1
+
+    0 $accept: input . $end
+    2 input: input . line
+    3 line: . '\n'
+    4     | . sentencia
+    5     | . sentencia '\n'
+    6     | . error
+    7     | . error ';'
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   53 declaracion: . declaracionVariable ';'
+   54            | . declaracionAsignacion ';'
+   55            | . declaracionFuncion ';'
+   56 declaracionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')'
+   57                   | . VOID IDENTIFICADOR '(' listaDeParametros ')'
+   58 definicionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   59                  | . VOID IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   64 declaracionVariable: . TIPOS_DE_DATOS listaDeVariables
+   65 declaracionAsignacion: . TIPOS_DE_DATOS listaDeVariablesAsignacion
+   72 sentenciaCompuesta: . '{' listaCompuesta '}'
+   75 sentencia: . sentenciaCompuesta
+   76          | . sentenciaExpresion
+   77          | . sentenciaSeleccion
+   78          | . sentenciaIteracion
+   79          | . sentenciaSalto
+   80          | . declaracion
+   81          | . definicionFuncion
+   82 sentenciaExpresion: . ';'
+   83                   | . expresion ';'
+   84 $@1: .  [IF]
+   85 sentenciaSeleccion: . $@1 IF '(' expresion ')' sentencia ELSE sentencia
+   86 $@2: .  [IF]
+   87 sentenciaSeleccion: . $@2 IF '(' expresion ')' sentencia
+   88 $@3: .  [WHILE]
+   89 sentenciaIteracion: . $@3 WHILE '(' expresion ')' sentencia
+   90 $@4: .  [DO]
+   91 sentenciaIteracion: . $@4 DO sentencia WHILE '(' expresion ')' ';'
+   92 $@5: .  [FOR]
+   93 sentenciaIteracion: . $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+   94 sentenciaSalto: . RETURN expresion ';'
+
+    $end            desplazar e ir al estado 2
+    error           desplazar e ir al estado 3
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    TIPOS_DE_DATOS  desplazar e ir al estado 7
+    VOID            desplazar e ir al estado 8
+    RETURN          desplazar e ir al estado 9
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+    '{'             desplazar e ir al estado 15
+    '\n'            desplazar e ir al estado 16
+    ';'             desplazar e ir al estado 17
+
+    IF     reduce usando la regla 84 ($@1)
+    IF     [reduce usando la regla 86 ($@2)]
+    DO     reduce usando la regla 90 ($@4)
+    WHILE  reduce usando la regla 88 ($@3)
+    FOR    reduce usando la regla 92 ($@5)
+
+    line                     ir al estado 18
+    expresion                ir al estado 19
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+    declaracion              ir al estado 32
+    declaracionFuncion       ir al estado 33
+    definicionFuncion        ir al estado 34
+    declaracionVariable      ir al estado 35
+    declaracionAsignacion    ir al estado 36
+    sentenciaCompuesta       ir al estado 37
+    sentencia                ir al estado 38
+    sentenciaExpresion       ir al estado 39
+    sentenciaSeleccion       ir al estado 40
+    $@1                      ir al estado 41
+    $@2                      ir al estado 42
+    sentenciaIteracion       ir al estado 43
+    $@3                      ir al estado 44
+    $@4                      ir al estado 45
+    $@5                      ir al estado 46
+    sentenciaSalto           ir al estado 47
+
+
+estado 2
+
+    0 $accept: input $end .
+
+    $default  aceptar
+
+
+estado 3
+
+    6 line: error .  [$end, error, CONSTANTES, LITERAL_CADENA, IDENTIFICADOR, TIPOS_DE_DATOS, VOID, RETURN, IF, DO, WHILE, FOR, '*', '+', '-', '&', '!', '{', '}', '\n', ';']
+    7     | error . ';'
+
+    ';'  desplazar e ir al estado 48
+
+    ';'       [reduce usando la regla 6 (line)]
+    $default  reduce usando la regla 6 (line)
+
+
+estado 4
+
+   50 expresionPrimaria: CONSTANTES .
+
+    $default  reduce usando la regla 50 (expresionPrimaria)
+
+
+estado 5
+
+   52 expresionPrimaria: LITERAL_CADENA .
+
+    $default  reduce usando la regla 52 (expresionPrimaria)
+
+
+estado 6
+
+   51 expresionPrimaria: IDENTIFICADOR .
+
+    $default  reduce usando la regla 51 (expresionPrimaria)
+
+
+estado 7
+
+   56 declaracionFuncion: TIPOS_DE_DATOS . IDENTIFICADOR '(' listaDeParametros ')'
+   58 definicionFuncion: TIPOS_DE_DATOS . IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   64 declaracionVariable: TIPOS_DE_DATOS . listaDeVariables
+   65 declaracionAsignacion: TIPOS_DE_DATOS . listaDeVariablesAsignacion
+   66 listaDeVariables: . variable
+   67                 | . variable ',' listaDeVariables
+   68 listaDeVariablesAsignacion: . variableAsignacion
+   69                           | . variableAsignacion ',' listaDeVariablesAsignacion
+   70 variable: . IDENTIFICADOR
+   71 variableAsignacion: . IDENTIFICADOR '=' expresionAsignacion
+
+    IDENTIFICADOR  desplazar e ir al estado 49
+
+    listaDeVariables            ir al estado 50
+    listaDeVariablesAsignacion  ir al estado 51
+    variable                    ir al estado 52
+    variableAsignacion          ir al estado 53
+
+
+estado 8
+
+   57 declaracionFuncion: VOID . IDENTIFICADOR '(' listaDeParametros ')'
+   59 definicionFuncion: VOID . IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+
+    IDENTIFICADOR  desplazar e ir al estado 54
+
+
+estado 9
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   94 sentenciaSalto: RETURN . expresion ';'
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresion                ir al estado 55
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 10
+
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   41                | '*' . expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionUnaria    ir al estado 56
+    operadorUnario     ir al estado 29
+    expresionPostfijo  ir al estado 30
+    expresionPrimaria  ir al estado 31
+
+
+estado 11
+
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   40                | '+' . expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionUnaria    ir al estado 57
+    operadorUnario     ir al estado 29
+    expresionPostfijo  ir al estado 30
+    expresionPrimaria  ir al estado 31
+
+
+estado 12
+
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   39                | '-' . expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionUnaria    ir al estado 58
+    operadorUnario     ir al estado 29
+    expresionPostfijo  ir al estado 30
+    expresionPrimaria  ir al estado 31
+
+
+estado 13
+
+   42 operadorUnario: '&' .
+
+    $default  reduce usando la regla 42 (operadorUnario)
+
+
+estado 14
+
+   43 operadorUnario: '!' .
+
+    $default  reduce usando la regla 43 (operadorUnario)
+
+
+estado 15
+
+    3 line: . '\n'
+    4     | . sentencia
+    5     | . sentencia '\n'
+    6     | . error
+    7     | . error ';'
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   53 declaracion: . declaracionVariable ';'
+   54            | . declaracionAsignacion ';'
+   55            | . declaracionFuncion ';'
+   56 declaracionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')'
+   57                   | . VOID IDENTIFICADOR '(' listaDeParametros ')'
+   58 definicionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   59                  | . VOID IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   64 declaracionVariable: . TIPOS_DE_DATOS listaDeVariables
+   65 declaracionAsignacion: . TIPOS_DE_DATOS listaDeVariablesAsignacion
+   72 sentenciaCompuesta: . '{' listaCompuesta '}'
+   72                   | '{' . listaCompuesta '}'
+   73 listaCompuesta: .  ['}']
+   74               | . line listaCompuesta
+   75 sentencia: . sentenciaCompuesta
+   76          | . sentenciaExpresion
+   77          | . sentenciaSeleccion
+   78          | . sentenciaIteracion
+   79          | . sentenciaSalto
+   80          | . declaracion
+   81          | . definicionFuncion
+   82 sentenciaExpresion: . ';'
+   83                   | . expresion ';'
+   84 $@1: .  [IF]
+   85 sentenciaSeleccion: . $@1 IF '(' expresion ')' sentencia ELSE sentencia
+   86 $@2: .  [IF]
+   87 sentenciaSeleccion: . $@2 IF '(' expresion ')' sentencia
+   88 $@3: .  [WHILE]
+   89 sentenciaIteracion: . $@3 WHILE '(' expresion ')' sentencia
+   90 $@4: .  [DO]
+   91 sentenciaIteracion: . $@4 DO sentencia WHILE '(' expresion ')' ';'
+   92 $@5: .  [FOR]
+   93 sentenciaIteracion: . $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+   94 sentenciaSalto: . RETURN expresion ';'
+
+    error           desplazar e ir al estado 3
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    TIPOS_DE_DATOS  desplazar e ir al estado 7
+    VOID            desplazar e ir al estado 8
+    RETURN          desplazar e ir al estado 9
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+    '{'             desplazar e ir al estado 15
+    '\n'            desplazar e ir al estado 16
+    ';'             desplazar e ir al estado 17
+
+    IF     reduce usando la regla 84 ($@1)
+    IF     [reduce usando la regla 86 ($@2)]
+    DO     reduce usando la regla 90 ($@4)
+    WHILE  reduce usando la regla 88 ($@3)
+    FOR    reduce usando la regla 92 ($@5)
+    '}'    reduce usando la regla 73 (listaCompuesta)
+
+    line                     ir al estado 59
+    expresion                ir al estado 19
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+    declaracion              ir al estado 32
+    declaracionFuncion       ir al estado 33
+    definicionFuncion        ir al estado 34
+    declaracionVariable      ir al estado 35
+    declaracionAsignacion    ir al estado 36
+    sentenciaCompuesta       ir al estado 37
+    listaCompuesta           ir al estado 60
+    sentencia                ir al estado 38
+    sentenciaExpresion       ir al estado 39
+    sentenciaSeleccion       ir al estado 40
+    $@1                      ir al estado 41
+    $@2                      ir al estado 42
+    sentenciaIteracion       ir al estado 43
+    $@3                      ir al estado 44
+    $@4                      ir al estado 45
+    $@5                      ir al estado 46
+    sentenciaSalto           ir al estado 47
+
+
+estado 16
+
+    3 line: '\n' .
+
+    $default  reduce usando la regla 3 (line)
+
+
+estado 17
+
+   82 sentenciaExpresion: ';' .
+
+    $default  reduce usando la regla 82 (sentenciaExpresion)
+
+
+estado 18
+
+    2 input: input line .
+
+    $default  reduce usando la regla 2 (input)
+
+
+estado 19
+
+   83 sentenciaExpresion: expresion . ';'
+
+    ';'  desplazar e ir al estado 61
+
+
+estado 20
+
+    8 expresion: expresionAsignacion .
+
+    $default  reduce usando la regla 8 (expresion)
+
+
+estado 21
+
+    9 expresionAsignacion: expresionCondicional .
+
+    $default  reduce usando la regla 9 (expresionAsignacion)
+
+
+estado 22
+
+   14 expresionCondicional: expresionOr .  [',', ':', ']', ')', ';']
+   15                     | expresionOr . '?' expresion ':' expresion
+   17 expresionOr: expresionOr . OR expresionAnd
+
+    OR   desplazar e ir al estado 62
+    '?'  desplazar e ir al estado 63
+
+    $default  reduce usando la regla 14 (expresionCondicional)
+
+
+estado 23
+
+   16 expresionOr: expresionAnd .  [OR, ',', ':', '?', ']', ')', ';']
+   19 expresionAnd: expresionAnd . AND expresionIgualdad
+
+    AND  desplazar e ir al estado 64
+
+    $default  reduce usando la regla 16 (expresionOr)
+
+
+estado 24
+
+   18 expresionAnd: expresionIgualdad .  [AND, OR, ',', ':', '?', ']', ')', ';']
+   21 expresionIgualdad: expresionIgualdad . operadorComparacion expresionRelacional
+   22 operadorComparacion: . IGUALDAD DESIGUALDAD
+
+    IGUALDAD  desplazar e ir al estado 65
+
+    $default  reduce usando la regla 18 (expresionAnd)
+
+    operadorComparacion  ir al estado 66
+
+
+estado 25
+
+   20 expresionIgualdad: expresionRelacional .  [AND, OR, IGUALDAD, ',', ':', '?', ']', ')', ';']
+   24 expresionRelacional: expresionRelacional . operadorRelacional expresionAditiva
+   25 operadorRelacional: . '>'
+   26                   | . '<'
+   27                   | . MENORIGUAL
+   28                   | . MAYORIGUAL
+
+    MAYORIGUAL  desplazar e ir al estado 67
+    MENORIGUAL  desplazar e ir al estado 68
+    '>'         desplazar e ir al estado 69
+    '<'         desplazar e ir al estado 70
+
+    $default  reduce usando la regla 20 (expresionIgualdad)
+
+    operadorRelacional  ir al estado 71
+
+
+estado 26
+
+   23 expresionRelacional: expresionAditiva .  [AND, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, ',', ':', '?', ']', ')', ';', '>', '<']
+   30 expresionAditiva: expresionAditiva . '+' expresionMultiplicativa
+   31                 | expresionAditiva . '-' expresionMultiplicativa
+
+    '+'  desplazar e ir al estado 72
+    '-'  desplazar e ir al estado 73
+
+    $default  reduce usando la regla 23 (expresionRelacional)
+
+
+estado 27
+
+   29 expresionAditiva: expresionMultiplicativa .  [AND, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '+', '-', ',', ':', '?', ']', ')', ';', '>', '<']
+   33 expresionMultiplicativa: expresionMultiplicativa . '*' expresionUnaria
+   34                        | expresionMultiplicativa . '/' expresionUnaria
+
+    '*'  desplazar e ir al estado 74
+    '/'  desplazar e ir al estado 75
+
+    $default  reduce usando la regla 29 (expresionAditiva)
+
+
+estado 28
+
+   10 expresionAsignacion: expresionUnaria . operacionAsignacion expresionAsignacion
+   11 operacionAsignacion: . '='
+   12                    | . SUMADIRECTA
+   13                    | . RESTADIRECTA
+   32 expresionMultiplicativa: expresionUnaria .  [AND, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '*', '/', '+', '-', ',', ':', '?', ']', ')', ';', '>', '<']
+   36 expresionUnaria: expresionUnaria . INCREMENTO
+   37                | expresionUnaria . DECREMENTO
+
+    INCREMENTO    desplazar e ir al estado 76
+    DECREMENTO    desplazar e ir al estado 77
+    SUMADIRECTA   desplazar e ir al estado 78
+    RESTADIRECTA  desplazar e ir al estado 79
+    '='           desplazar e ir al estado 80
+
+    $default  reduce usando la regla 32 (expresionMultiplicativa)
+
+    operacionAsignacion  ir al estado 81
+
+
+estado 29
+
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   38                | operadorUnario . expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionUnaria    ir al estado 82
+    operadorUnario     ir al estado 29
+    expresionPostfijo  ir al estado 30
+    expresionPrimaria  ir al estado 31
+
+
+estado 30
+
+   35 expresionUnaria: expresionPostfijo .  [AND, INCREMENTO, DECREMENTO, SUMADIRECTA, RESTADIRECTA, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '*', '/', '+', '-', ',', ':', '?', '=', ']', ')', ';', '>', '<']
+   45 expresionPostfijo: expresionPostfijo . '[' expresion ']'
+   46                  | expresionPostfijo . '(' listaDeArgumentos ')'
+
+    '['  desplazar e ir al estado 83
+    '('  desplazar e ir al estado 84
+
+    $default  reduce usando la regla 35 (expresionUnaria)
+
+
+estado 31
+
+   44 expresionPostfijo: expresionPrimaria .
+
+    $default  reduce usando la regla 44 (expresionPostfijo)
+
+
+estado 32
+
+   80 sentencia: declaracion .
+
+    $default  reduce usando la regla 80 (sentencia)
+
+
+estado 33
+
+   55 declaracion: declaracionFuncion . ';'
+
+    ';'  desplazar e ir al estado 85
+
+
+estado 34
+
+   81 sentencia: definicionFuncion .
+
+    $default  reduce usando la regla 81 (sentencia)
+
+
+estado 35
+
+   53 declaracion: declaracionVariable . ';'
+
+    ';'  desplazar e ir al estado 86
+
+
+estado 36
+
+   54 declaracion: declaracionAsignacion . ';'
+
+    ';'  desplazar e ir al estado 87
+
+
+estado 37
+
+   75 sentencia: sentenciaCompuesta .
+
+    $default  reduce usando la regla 75 (sentencia)
+
+
+estado 38
+
+    4 line: sentencia .  [$end, error, CONSTANTES, LITERAL_CADENA, IDENTIFICADOR, TIPOS_DE_DATOS, VOID, RETURN, IF, DO, WHILE, FOR, '*', '+', '-', '&', '!', '{', '}', '\n', ';']
+    5     | sentencia . '\n'
+
+    '\n'  desplazar e ir al estado 88
+
+    '\n'      [reduce usando la regla 4 (line)]
+    $default  reduce usando la regla 4 (line)
+
+
+estado 39
+
+   76 sentencia: sentenciaExpresion .
+
+    $default  reduce usando la regla 76 (sentencia)
+
+
+estado 40
+
+   77 sentencia: sentenciaSeleccion .
+
+    $default  reduce usando la regla 77 (sentencia)
+
+
+estado 41
+
+   85 sentenciaSeleccion: $@1 . IF '(' expresion ')' sentencia ELSE sentencia
+
+    IF  desplazar e ir al estado 89
+
+
+estado 42
+
+   87 sentenciaSeleccion: $@2 . IF '(' expresion ')' sentencia
+
+    IF  desplazar e ir al estado 90
+
+
+estado 43
+
+   78 sentencia: sentenciaIteracion .
+
+    $default  reduce usando la regla 78 (sentencia)
+
+
+estado 44
+
+   89 sentenciaIteracion: $@3 . WHILE '(' expresion ')' sentencia
+
+    WHILE  desplazar e ir al estado 91
+
+
+estado 45
+
+   91 sentenciaIteracion: $@4 . DO sentencia WHILE '(' expresion ')' ';'
+
+    DO  desplazar e ir al estado 92
+
+
+estado 46
+
+   93 sentenciaIteracion: $@5 . FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+
+    FOR  desplazar e ir al estado 93
+
+
+estado 47
+
+   79 sentencia: sentenciaSalto .
+
+    $default  reduce usando la regla 79 (sentencia)
+
+
+estado 48
+
+    7 line: error ';' .
+
+    $default  reduce usando la regla 7 (line)
+
+
+estado 49
+
+   56 declaracionFuncion: TIPOS_DE_DATOS IDENTIFICADOR . '(' listaDeParametros ')'
+   58 definicionFuncion: TIPOS_DE_DATOS IDENTIFICADOR . '(' listaDeParametros ')' sentenciaCompuesta
+   70 variable: IDENTIFICADOR .  [',', ';']
+   71 variableAsignacion: IDENTIFICADOR . '=' expresionAsignacion
+
+    '='  desplazar e ir al estado 94
+    '('  desplazar e ir al estado 95
+
+    $default  reduce usando la regla 70 (variable)
+
+
+estado 50
+
+   64 declaracionVariable: TIPOS_DE_DATOS listaDeVariables .
+
+    $default  reduce usando la regla 64 (declaracionVariable)
+
+
+estado 51
+
+   65 declaracionAsignacion: TIPOS_DE_DATOS listaDeVariablesAsignacion .
+
+    $default  reduce usando la regla 65 (declaracionAsignacion)
+
+
+estado 52
+
+   66 listaDeVariables: variable .  [';']
+   67                 | variable . ',' listaDeVariables
+
+    ','  desplazar e ir al estado 96
+
+    $default  reduce usando la regla 66 (listaDeVariables)
+
+
+estado 53
+
+   68 listaDeVariablesAsignacion: variableAsignacion .  [';']
+   69                           | variableAsignacion . ',' listaDeVariablesAsignacion
+
+    ','  desplazar e ir al estado 97
+
+    $default  reduce usando la regla 68 (listaDeVariablesAsignacion)
+
+
+estado 54
+
+   57 declaracionFuncion: VOID IDENTIFICADOR . '(' listaDeParametros ')'
+   59 definicionFuncion: VOID IDENTIFICADOR . '(' listaDeParametros ')' sentenciaCompuesta
+
+    '('  desplazar e ir al estado 98
+
+
+estado 55
+
+   94 sentenciaSalto: RETURN expresion . ';'
+
+    ';'  desplazar e ir al estado 99
+
+
+estado 56
+
+   36 expresionUnaria: expresionUnaria . INCREMENTO
+   37                | expresionUnaria . DECREMENTO
+   41                | '*' expresionUnaria .  [AND, INCREMENTO, DECREMENTO, SUMADIRECTA, RESTADIRECTA, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '*', '/', '+', '-', ',', ':', '?', '=', ']', ')', ';', '>', '<']
+
+    INCREMENTO  desplazar e ir al estado 76
+    DECREMENTO  desplazar e ir al estado 77
+
+    INCREMENTO  [reduce usando la regla 41 (expresionUnaria)]
+    DECREMENTO  [reduce usando la regla 41 (expresionUnaria)]
+    $default    reduce usando la regla 41 (expresionUnaria)
+
+
+estado 57
+
+   36 expresionUnaria: expresionUnaria . INCREMENTO
+   37                | expresionUnaria . DECREMENTO
+   40                | '+' expresionUnaria .  [AND, INCREMENTO, DECREMENTO, SUMADIRECTA, RESTADIRECTA, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '*', '/', '+', '-', ',', ':', '?', '=', ']', ')', ';', '>', '<']
+
+    INCREMENTO  desplazar e ir al estado 76
+    DECREMENTO  desplazar e ir al estado 77
+
+    INCREMENTO  [reduce usando la regla 40 (expresionUnaria)]
+    DECREMENTO  [reduce usando la regla 40 (expresionUnaria)]
+    $default    reduce usando la regla 40 (expresionUnaria)
+
+
+estado 58
+
+   36 expresionUnaria: expresionUnaria . INCREMENTO
+   37                | expresionUnaria . DECREMENTO
+   39                | '-' expresionUnaria .  [AND, INCREMENTO, DECREMENTO, SUMADIRECTA, RESTADIRECTA, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '*', '/', '+', '-', ',', ':', '?', '=', ']', ')', ';', '>', '<']
+
+    INCREMENTO  desplazar e ir al estado 76
+    DECREMENTO  desplazar e ir al estado 77
+
+    INCREMENTO  [reduce usando la regla 39 (expresionUnaria)]
+    DECREMENTO  [reduce usando la regla 39 (expresionUnaria)]
+    $default    reduce usando la regla 39 (expresionUnaria)
+
+
+estado 59
+
+    3 line: . '\n'
+    4     | . sentencia
+    5     | . sentencia '\n'
+    6     | . error
+    7     | . error ';'
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   53 declaracion: . declaracionVariable ';'
+   54            | . declaracionAsignacion ';'
+   55            | . declaracionFuncion ';'
+   56 declaracionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')'
+   57                   | . VOID IDENTIFICADOR '(' listaDeParametros ')'
+   58 definicionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   59                  | . VOID IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   64 declaracionVariable: . TIPOS_DE_DATOS listaDeVariables
+   65 declaracionAsignacion: . TIPOS_DE_DATOS listaDeVariablesAsignacion
+   72 sentenciaCompuesta: . '{' listaCompuesta '}'
+   73 listaCompuesta: .  ['}']
+   74               | . line listaCompuesta
+   74               | line . listaCompuesta
+   75 sentencia: . sentenciaCompuesta
+   76          | . sentenciaExpresion
+   77          | . sentenciaSeleccion
+   78          | . sentenciaIteracion
+   79          | . sentenciaSalto
+   80          | . declaracion
+   81          | . definicionFuncion
+   82 sentenciaExpresion: . ';'
+   83                   | . expresion ';'
+   84 $@1: .  [IF]
+   85 sentenciaSeleccion: . $@1 IF '(' expresion ')' sentencia ELSE sentencia
+   86 $@2: .  [IF]
+   87 sentenciaSeleccion: . $@2 IF '(' expresion ')' sentencia
+   88 $@3: .  [WHILE]
+   89 sentenciaIteracion: . $@3 WHILE '(' expresion ')' sentencia
+   90 $@4: .  [DO]
+   91 sentenciaIteracion: . $@4 DO sentencia WHILE '(' expresion ')' ';'
+   92 $@5: .  [FOR]
+   93 sentenciaIteracion: . $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+   94 sentenciaSalto: . RETURN expresion ';'
+
+    error           desplazar e ir al estado 3
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    TIPOS_DE_DATOS  desplazar e ir al estado 7
+    VOID            desplazar e ir al estado 8
+    RETURN          desplazar e ir al estado 9
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+    '{'             desplazar e ir al estado 15
+    '\n'            desplazar e ir al estado 16
+    ';'             desplazar e ir al estado 17
+
+    IF     reduce usando la regla 84 ($@1)
+    IF     [reduce usando la regla 86 ($@2)]
+    DO     reduce usando la regla 90 ($@4)
+    WHILE  reduce usando la regla 88 ($@3)
+    FOR    reduce usando la regla 92 ($@5)
+    '}'    reduce usando la regla 73 (listaCompuesta)
+
+    line                     ir al estado 59
+    expresion                ir al estado 19
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+    declaracion              ir al estado 32
+    declaracionFuncion       ir al estado 33
+    definicionFuncion        ir al estado 34
+    declaracionVariable      ir al estado 35
+    declaracionAsignacion    ir al estado 36
+    sentenciaCompuesta       ir al estado 37
+    listaCompuesta           ir al estado 100
+    sentencia                ir al estado 38
+    sentenciaExpresion       ir al estado 39
+    sentenciaSeleccion       ir al estado 40
+    $@1                      ir al estado 41
+    $@2                      ir al estado 42
+    sentenciaIteracion       ir al estado 43
+    $@3                      ir al estado 44
+    $@4                      ir al estado 45
+    $@5                      ir al estado 46
+    sentenciaSalto           ir al estado 47
+
+
+estado 60
+
+   72 sentenciaCompuesta: '{' listaCompuesta . '}'
+
+    '}'  desplazar e ir al estado 101
+
+
+estado 61
+
+   83 sentenciaExpresion: expresion ';' .
+
+    $default  reduce usando la regla 83 (sentenciaExpresion)
+
+
+estado 62
+
+   17 expresionOr: expresionOr OR . expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionAnd             ir al estado 102
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 103
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 63
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   15                     | expresionOr '?' . expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresion                ir al estado 104
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 64
+
+   19 expresionAnd: expresionAnd AND . expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionIgualdad        ir al estado 105
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 103
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 65
+
+   22 operadorComparacion: IGUALDAD . DESIGUALDAD
+
+    DESIGUALDAD  desplazar e ir al estado 106
+
+
+estado 66
+
+   21 expresionIgualdad: expresionIgualdad operadorComparacion . expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionRelacional      ir al estado 107
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 103
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 67
+
+   28 operadorRelacional: MAYORIGUAL .
+
+    $default  reduce usando la regla 28 (operadorRelacional)
+
+
+estado 68
+
+   27 operadorRelacional: MENORIGUAL .
+
+    $default  reduce usando la regla 27 (operadorRelacional)
+
+
+estado 69
+
+   25 operadorRelacional: '>' .
+
+    $default  reduce usando la regla 25 (operadorRelacional)
+
+
+estado 70
+
+   26 operadorRelacional: '<' .
+
+    $default  reduce usando la regla 26 (operadorRelacional)
+
+
+estado 71
+
+   24 expresionRelacional: expresionRelacional operadorRelacional . expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionAditiva         ir al estado 108
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 103
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 72
+
+   30 expresionAditiva: expresionAditiva '+' . expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionMultiplicativa  ir al estado 109
+    expresionUnaria          ir al estado 103
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 73
+
+   31 expresionAditiva: expresionAditiva '-' . expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionMultiplicativa  ir al estado 110
+    expresionUnaria          ir al estado 103
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 74
+
+   33 expresionMultiplicativa: expresionMultiplicativa '*' . expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionUnaria    ir al estado 111
+    operadorUnario     ir al estado 29
+    expresionPostfijo  ir al estado 30
+    expresionPrimaria  ir al estado 31
+
+
+estado 75
+
+   34 expresionMultiplicativa: expresionMultiplicativa '/' . expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionUnaria    ir al estado 112
+    operadorUnario     ir al estado 29
+    expresionPostfijo  ir al estado 30
+    expresionPrimaria  ir al estado 31
+
+
+estado 76
+
+   36 expresionUnaria: expresionUnaria INCREMENTO .
+
+    $default  reduce usando la regla 36 (expresionUnaria)
+
+
+estado 77
+
+   37 expresionUnaria: expresionUnaria DECREMENTO .
+
+    $default  reduce usando la regla 37 (expresionUnaria)
+
+
+estado 78
+
+   12 operacionAsignacion: SUMADIRECTA .
+
+    $default  reduce usando la regla 12 (operacionAsignacion)
+
+
+estado 79
+
+   13 operacionAsignacion: RESTADIRECTA .
+
+    $default  reduce usando la regla 13 (operacionAsignacion)
+
+
+estado 80
+
+   11 operacionAsignacion: '=' .
+
+    $default  reduce usando la regla 11 (operacionAsignacion)
+
+
+estado 81
+
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   10                    | expresionUnaria operacionAsignacion . expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionAsignacion      ir al estado 113
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 82
+
+   36 expresionUnaria: expresionUnaria . INCREMENTO
+   37                | expresionUnaria . DECREMENTO
+   38                | operadorUnario expresionUnaria .  [AND, INCREMENTO, DECREMENTO, SUMADIRECTA, RESTADIRECTA, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '*', '/', '+', '-', ',', ':', '?', '=', ']', ')', ';', '>', '<']
+
+    INCREMENTO  desplazar e ir al estado 76
+    DECREMENTO  desplazar e ir al estado 77
+
+    INCREMENTO  [reduce usando la regla 38 (expresionUnaria)]
+    DECREMENTO  [reduce usando la regla 38 (expresionUnaria)]
+    $default    reduce usando la regla 38 (expresionUnaria)
+
+
+estado 83
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   45                  | expresionPostfijo '[' . expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresion                ir al estado 114
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 84
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   46                  | expresionPostfijo '(' . listaDeArgumentos ')'
+   47 listaDeArgumentos: . argumento
+   48                  | . listaDeArgumentos ',' argumento
+   49 argumento: . expresion
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresion                ir al estado 115
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    listaDeArgumentos        ir al estado 116
+    argumento                ir al estado 117
+    expresionPrimaria        ir al estado 31
+
+
+estado 85
+
+   55 declaracion: declaracionFuncion ';' .
+
+    $default  reduce usando la regla 55 (declaracion)
+
+
+estado 86
+
+   53 declaracion: declaracionVariable ';' .
+
+    $default  reduce usando la regla 53 (declaracion)
+
+
+estado 87
+
+   54 declaracion: declaracionAsignacion ';' .
+
+    $default  reduce usando la regla 54 (declaracion)
+
+
+estado 88
+
+    5 line: sentencia '\n' .
+
+    $default  reduce usando la regla 5 (line)
+
+
+estado 89
+
+   85 sentenciaSeleccion: $@1 IF . '(' expresion ')' sentencia ELSE sentencia
+
+    '('  desplazar e ir al estado 118
+
+
+estado 90
+
+   87 sentenciaSeleccion: $@2 IF . '(' expresion ')' sentencia
+
+    '('  desplazar e ir al estado 119
+
+
+estado 91
+
+   89 sentenciaIteracion: $@3 WHILE . '(' expresion ')' sentencia
+
+    '('  desplazar e ir al estado 120
+
+
+estado 92
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   53 declaracion: . declaracionVariable ';'
+   54            | . declaracionAsignacion ';'
+   55            | . declaracionFuncion ';'
+   56 declaracionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')'
+   57                   | . VOID IDENTIFICADOR '(' listaDeParametros ')'
+   58 definicionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   59                  | . VOID IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   64 declaracionVariable: . TIPOS_DE_DATOS listaDeVariables
+   65 declaracionAsignacion: . TIPOS_DE_DATOS listaDeVariablesAsignacion
+   72 sentenciaCompuesta: . '{' listaCompuesta '}'
+   75 sentencia: . sentenciaCompuesta
+   76          | . sentenciaExpresion
+   77          | . sentenciaSeleccion
+   78          | . sentenciaIteracion
+   79          | . sentenciaSalto
+   80          | . declaracion
+   81          | . definicionFuncion
+   82 sentenciaExpresion: . ';'
+   83                   | . expresion ';'
+   84 $@1: .  [IF]
+   85 sentenciaSeleccion: . $@1 IF '(' expresion ')' sentencia ELSE sentencia
+   86 $@2: .  [IF]
+   87 sentenciaSeleccion: . $@2 IF '(' expresion ')' sentencia
+   88 $@3: .  [WHILE]
+   89 sentenciaIteracion: . $@3 WHILE '(' expresion ')' sentencia
+   90 $@4: .  [DO]
+   91 sentenciaIteracion: . $@4 DO sentencia WHILE '(' expresion ')' ';'
+   91                   | $@4 DO . sentencia WHILE '(' expresion ')' ';'
+   92 $@5: .  [FOR]
+   93 sentenciaIteracion: . $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+   94 sentenciaSalto: . RETURN expresion ';'
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    TIPOS_DE_DATOS  desplazar e ir al estado 7
+    VOID            desplazar e ir al estado 8
+    RETURN          desplazar e ir al estado 9
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+    '{'             desplazar e ir al estado 15
+    ';'             desplazar e ir al estado 17
+
+    IF        reduce usando la regla 84 ($@1)
+    IF        [reduce usando la regla 86 ($@2)]
+    DO        reduce usando la regla 90 ($@4)
+    WHILE     reduce usando la regla 88 ($@3)
+    FOR       reduce usando la regla 92 ($@5)
+    $default  reduce usando la regla 84 ($@1)
+
+    expresion                ir al estado 19
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+    declaracion              ir al estado 32
+    declaracionFuncion       ir al estado 33
+    definicionFuncion        ir al estado 34
+    declaracionVariable      ir al estado 35
+    declaracionAsignacion    ir al estado 36
+    sentenciaCompuesta       ir al estado 37
+    sentencia                ir al estado 121
+    sentenciaExpresion       ir al estado 39
+    sentenciaSeleccion       ir al estado 40
+    $@1                      ir al estado 41
+    $@2                      ir al estado 42
+    sentenciaIteracion       ir al estado 43
+    $@3                      ir al estado 44
+    $@4                      ir al estado 45
+    $@5                      ir al estado 46
+    sentenciaSalto           ir al estado 47
+
+
+estado 93
+
+   93 sentenciaIteracion: $@5 FOR . '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+
+    '('  desplazar e ir al estado 122
+
+
+estado 94
+
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   71 variableAsignacion: IDENTIFICADOR '=' . expresionAsignacion
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresionAsignacion      ir al estado 123
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 95
+
+   56 declaracionFuncion: TIPOS_DE_DATOS IDENTIFICADOR '(' . listaDeParametros ')'
+   58 definicionFuncion: TIPOS_DE_DATOS IDENTIFICADOR '(' . listaDeParametros ')' sentenciaCompuesta
+   60 listaDeParametros: .  [',', ')']
+   61                  | . parametro
+   62                  | . listaDeParametros ',' parametro
+   63 parametro: . TIPOS_DE_DATOS IDENTIFICADOR
+
+    TIPOS_DE_DATOS  desplazar e ir al estado 124
+
+    $default  reduce usando la regla 60 (listaDeParametros)
+
+    listaDeParametros  ir al estado 125
+    parametro          ir al estado 126
+
+
+estado 96
+
+   66 listaDeVariables: . variable
+   67                 | . variable ',' listaDeVariables
+   67                 | variable ',' . listaDeVariables
+   70 variable: . IDENTIFICADOR
+
+    IDENTIFICADOR  desplazar e ir al estado 127
+
+    listaDeVariables  ir al estado 128
+    variable          ir al estado 52
+
+
+estado 97
+
+   68 listaDeVariablesAsignacion: . variableAsignacion
+   69                           | . variableAsignacion ',' listaDeVariablesAsignacion
+   69                           | variableAsignacion ',' . listaDeVariablesAsignacion
+   71 variableAsignacion: . IDENTIFICADOR '=' expresionAsignacion
+
+    IDENTIFICADOR  desplazar e ir al estado 129
+
+    listaDeVariablesAsignacion  ir al estado 130
+    variableAsignacion          ir al estado 53
+
+
+estado 98
+
+   57 declaracionFuncion: VOID IDENTIFICADOR '(' . listaDeParametros ')'
+   59 definicionFuncion: VOID IDENTIFICADOR '(' . listaDeParametros ')' sentenciaCompuesta
+   60 listaDeParametros: .  [',', ')']
+   61                  | . parametro
+   62                  | . listaDeParametros ',' parametro
+   63 parametro: . TIPOS_DE_DATOS IDENTIFICADOR
+
+    TIPOS_DE_DATOS  desplazar e ir al estado 124
+
+    $default  reduce usando la regla 60 (listaDeParametros)
+
+    listaDeParametros  ir al estado 131
+    parametro          ir al estado 126
+
+
+estado 99
+
+   94 sentenciaSalto: RETURN expresion ';' .
+
+    $default  reduce usando la regla 94 (sentenciaSalto)
+
+
+estado 100
+
+   74 listaCompuesta: line listaCompuesta .
+
+    $default  reduce usando la regla 74 (listaCompuesta)
+
+
+estado 101
+
+   72 sentenciaCompuesta: '{' listaCompuesta '}' .
+
+    $default  reduce usando la regla 72 (sentenciaCompuesta)
+
+
+estado 102
+
+   17 expresionOr: expresionOr OR expresionAnd .  [OR, ',', ':', '?', ']', ')', ';']
+   19 expresionAnd: expresionAnd . AND expresionIgualdad
+
+    AND  desplazar e ir al estado 64
+
+    $default  reduce usando la regla 17 (expresionOr)
+
+
+estado 103
+
+   32 expresionMultiplicativa: expresionUnaria .  [AND, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '*', '/', '+', '-', ',', ':', '?', ']', ')', ';', '>', '<']
+   36 expresionUnaria: expresionUnaria . INCREMENTO
+   37                | expresionUnaria . DECREMENTO
+
+    INCREMENTO  desplazar e ir al estado 76
+    DECREMENTO  desplazar e ir al estado 77
+
+    $default  reduce usando la regla 32 (expresionMultiplicativa)
+
+
+estado 104
+
+   15 expresionCondicional: expresionOr '?' expresion . ':' expresion
+
+    ':'  desplazar e ir al estado 132
+
+
+estado 105
+
+   19 expresionAnd: expresionAnd AND expresionIgualdad .  [AND, OR, ',', ':', '?', ']', ')', ';']
+   21 expresionIgualdad: expresionIgualdad . operadorComparacion expresionRelacional
+   22 operadorComparacion: . IGUALDAD DESIGUALDAD
+
+    IGUALDAD  desplazar e ir al estado 65
+
+    $default  reduce usando la regla 19 (expresionAnd)
+
+    operadorComparacion  ir al estado 66
+
+
+estado 106
+
+   22 operadorComparacion: IGUALDAD DESIGUALDAD .
+
+    $default  reduce usando la regla 22 (operadorComparacion)
+
+
+estado 107
+
+   21 expresionIgualdad: expresionIgualdad operadorComparacion expresionRelacional .  [AND, OR, IGUALDAD, ',', ':', '?', ']', ')', ';']
+   24 expresionRelacional: expresionRelacional . operadorRelacional expresionAditiva
+   25 operadorRelacional: . '>'
+   26                   | . '<'
+   27                   | . MENORIGUAL
+   28                   | . MAYORIGUAL
+
+    MAYORIGUAL  desplazar e ir al estado 67
+    MENORIGUAL  desplazar e ir al estado 68
+    '>'         desplazar e ir al estado 69
+    '<'         desplazar e ir al estado 70
+
+    $default  reduce usando la regla 21 (expresionIgualdad)
+
+    operadorRelacional  ir al estado 71
+
+
+estado 108
+
+   24 expresionRelacional: expresionRelacional operadorRelacional expresionAditiva .  [AND, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, ',', ':', '?', ']', ')', ';', '>', '<']
+   30 expresionAditiva: expresionAditiva . '+' expresionMultiplicativa
+   31                 | expresionAditiva . '-' expresionMultiplicativa
+
+    '+'  desplazar e ir al estado 72
+    '-'  desplazar e ir al estado 73
+
+    $default  reduce usando la regla 24 (expresionRelacional)
+
+
+estado 109
+
+   30 expresionAditiva: expresionAditiva '+' expresionMultiplicativa .  [AND, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '+', '-', ',', ':', '?', ']', ')', ';', '>', '<']
+   33 expresionMultiplicativa: expresionMultiplicativa . '*' expresionUnaria
+   34                        | expresionMultiplicativa . '/' expresionUnaria
+
+    '*'  desplazar e ir al estado 74
+    '/'  desplazar e ir al estado 75
+
+    $default  reduce usando la regla 30 (expresionAditiva)
+
+
+estado 110
+
+   31 expresionAditiva: expresionAditiva '-' expresionMultiplicativa .  [AND, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '+', '-', ',', ':', '?', ']', ')', ';', '>', '<']
+   33 expresionMultiplicativa: expresionMultiplicativa . '*' expresionUnaria
+   34                        | expresionMultiplicativa . '/' expresionUnaria
+
+    '*'  desplazar e ir al estado 74
+    '/'  desplazar e ir al estado 75
+
+    $default  reduce usando la regla 31 (expresionAditiva)
+
+
+estado 111
+
+   33 expresionMultiplicativa: expresionMultiplicativa '*' expresionUnaria .  [AND, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '*', '/', '+', '-', ',', ':', '?', ']', ')', ';', '>', '<']
+   36 expresionUnaria: expresionUnaria . INCREMENTO
+   37                | expresionUnaria . DECREMENTO
+
+    INCREMENTO  desplazar e ir al estado 76
+    DECREMENTO  desplazar e ir al estado 77
+
+    $default  reduce usando la regla 33 (expresionMultiplicativa)
+
+
+estado 112
+
+   34 expresionMultiplicativa: expresionMultiplicativa '/' expresionUnaria .  [AND, OR, MAYORIGUAL, MENORIGUAL, IGUALDAD, '*', '/', '+', '-', ',', ':', '?', ']', ')', ';', '>', '<']
+   36 expresionUnaria: expresionUnaria . INCREMENTO
+   37                | expresionUnaria . DECREMENTO
+
+    INCREMENTO  desplazar e ir al estado 76
+    DECREMENTO  desplazar e ir al estado 77
+
+    $default  reduce usando la regla 34 (expresionMultiplicativa)
+
+
+estado 113
+
+   10 expresionAsignacion: expresionUnaria operacionAsignacion expresionAsignacion .
+
+    $default  reduce usando la regla 10 (expresionAsignacion)
+
+
+estado 114
+
+   45 expresionPostfijo: expresionPostfijo '[' expresion . ']'
+
+    ']'  desplazar e ir al estado 133
+
+
+estado 115
+
+   49 argumento: expresion .
+
+    $default  reduce usando la regla 49 (argumento)
+
+
+estado 116
+
+   46 expresionPostfijo: expresionPostfijo '(' listaDeArgumentos . ')'
+   48 listaDeArgumentos: listaDeArgumentos . ',' argumento
+
+    ','  desplazar e ir al estado 134
+    ')'  desplazar e ir al estado 135
+
+
+estado 117
+
+   47 listaDeArgumentos: argumento .
+
+    $default  reduce usando la regla 47 (listaDeArgumentos)
+
+
+estado 118
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   85 sentenciaSeleccion: $@1 IF '(' . expresion ')' sentencia ELSE sentencia
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresion                ir al estado 136
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 119
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   87 sentenciaSeleccion: $@2 IF '(' . expresion ')' sentencia
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresion                ir al estado 137
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 120
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   89 sentenciaIteracion: $@3 WHILE '(' . expresion ')' sentencia
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresion                ir al estado 138
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 121
+
+   91 sentenciaIteracion: $@4 DO sentencia . WHILE '(' expresion ')' ';'
+
+    WHILE  desplazar e ir al estado 139
+
+
+estado 122
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   93 sentenciaIteracion: $@5 FOR '(' . expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+   95 expresionOP: .  [';']
+   96            | . expresion
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    $default  reduce usando la regla 95 (expresionOP)
+
+    expresion                ir al estado 140
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+    expresionOP              ir al estado 141
+
+
+estado 123
+
+   71 variableAsignacion: IDENTIFICADOR '=' expresionAsignacion .
+
+    $default  reduce usando la regla 71 (variableAsignacion)
+
+
+estado 124
+
+   63 parametro: TIPOS_DE_DATOS . IDENTIFICADOR
+
+    IDENTIFICADOR  desplazar e ir al estado 142
+
+
+estado 125
+
+   56 declaracionFuncion: TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros . ')'
+   58 definicionFuncion: TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros . ')' sentenciaCompuesta
+   62 listaDeParametros: listaDeParametros . ',' parametro
+
+    ','  desplazar e ir al estado 143
+    ')'  desplazar e ir al estado 144
+
+
+estado 126
+
+   61 listaDeParametros: parametro .
+
+    $default  reduce usando la regla 61 (listaDeParametros)
+
+
+estado 127
+
+   70 variable: IDENTIFICADOR .
+
+    $default  reduce usando la regla 70 (variable)
+
+
+estado 128
+
+   67 listaDeVariables: variable ',' listaDeVariables .
+
+    $default  reduce usando la regla 67 (listaDeVariables)
+
+
+estado 129
+
+   71 variableAsignacion: IDENTIFICADOR . '=' expresionAsignacion
+
+    '='  desplazar e ir al estado 94
+
+
+estado 130
+
+   69 listaDeVariablesAsignacion: variableAsignacion ',' listaDeVariablesAsignacion .
+
+    $default  reduce usando la regla 69 (listaDeVariablesAsignacion)
+
+
+estado 131
+
+   57 declaracionFuncion: VOID IDENTIFICADOR '(' listaDeParametros . ')'
+   59 definicionFuncion: VOID IDENTIFICADOR '(' listaDeParametros . ')' sentenciaCompuesta
+   62 listaDeParametros: listaDeParametros . ',' parametro
+
+    ','  desplazar e ir al estado 143
+    ')'  desplazar e ir al estado 145
+
+
+estado 132
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   15                     | expresionOr '?' expresion ':' . expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresion                ir al estado 146
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 133
+
+   45 expresionPostfijo: expresionPostfijo '[' expresion ']' .
+
+    $default  reduce usando la regla 45 (expresionPostfijo)
+
+
+estado 134
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   48 listaDeArgumentos: listaDeArgumentos ',' . argumento
+   49 argumento: . expresion
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresion                ir al estado 115
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    argumento                ir al estado 147
+    expresionPrimaria        ir al estado 31
+
+
+estado 135
+
+   46 expresionPostfijo: expresionPostfijo '(' listaDeArgumentos ')' .
+
+    $default  reduce usando la regla 46 (expresionPostfijo)
+
+
+estado 136
+
+   85 sentenciaSeleccion: $@1 IF '(' expresion . ')' sentencia ELSE sentencia
+
+    ')'  desplazar e ir al estado 148
+
+
+estado 137
+
+   87 sentenciaSeleccion: $@2 IF '(' expresion . ')' sentencia
+
+    ')'  desplazar e ir al estado 149
+
+
+estado 138
+
+   89 sentenciaIteracion: $@3 WHILE '(' expresion . ')' sentencia
+
+    ')'  desplazar e ir al estado 150
+
+
+estado 139
+
+   91 sentenciaIteracion: $@4 DO sentencia WHILE . '(' expresion ')' ';'
+
+    '('  desplazar e ir al estado 151
+
+
+estado 140
+
+   96 expresionOP: expresion .
+
+    $default  reduce usando la regla 96 (expresionOP)
+
+
+estado 141
+
+   93 sentenciaIteracion: $@5 FOR '(' expresionOP . ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+
+    ';'  desplazar e ir al estado 152
+
+
+estado 142
+
+   63 parametro: TIPOS_DE_DATOS IDENTIFICADOR .
+
+    $default  reduce usando la regla 63 (parametro)
+
+
+estado 143
+
+   62 listaDeParametros: listaDeParametros ',' . parametro
+   63 parametro: . TIPOS_DE_DATOS IDENTIFICADOR
+
+    TIPOS_DE_DATOS  desplazar e ir al estado 124
+
+    parametro  ir al estado 153
+
+
+estado 144
+
+   56 declaracionFuncion: TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' .  [';']
+   58 definicionFuncion: TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' . sentenciaCompuesta
+   72 sentenciaCompuesta: . '{' listaCompuesta '}'
+
+    '{'  desplazar e ir al estado 15
+
+    $default  reduce usando la regla 56 (declaracionFuncion)
+
+    sentenciaCompuesta  ir al estado 154
+
+
+estado 145
+
+   57 declaracionFuncion: VOID IDENTIFICADOR '(' listaDeParametros ')' .  [';']
+   59 definicionFuncion: VOID IDENTIFICADOR '(' listaDeParametros ')' . sentenciaCompuesta
+   72 sentenciaCompuesta: . '{' listaCompuesta '}'
+
+    '{'  desplazar e ir al estado 15
+
+    $default  reduce usando la regla 57 (declaracionFuncion)
+
+    sentenciaCompuesta  ir al estado 155
+
+
+estado 146
+
+   15 expresionCondicional: expresionOr '?' expresion ':' expresion .
+
+    $default  reduce usando la regla 15 (expresionCondicional)
+
+
+estado 147
+
+   48 listaDeArgumentos: listaDeArgumentos ',' argumento .
+
+    $default  reduce usando la regla 48 (listaDeArgumentos)
+
+
+estado 148
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   53 declaracion: . declaracionVariable ';'
+   54            | . declaracionAsignacion ';'
+   55            | . declaracionFuncion ';'
+   56 declaracionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')'
+   57                   | . VOID IDENTIFICADOR '(' listaDeParametros ')'
+   58 definicionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   59                  | . VOID IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   64 declaracionVariable: . TIPOS_DE_DATOS listaDeVariables
+   65 declaracionAsignacion: . TIPOS_DE_DATOS listaDeVariablesAsignacion
+   72 sentenciaCompuesta: . '{' listaCompuesta '}'
+   75 sentencia: . sentenciaCompuesta
+   76          | . sentenciaExpresion
+   77          | . sentenciaSeleccion
+   78          | . sentenciaIteracion
+   79          | . sentenciaSalto
+   80          | . declaracion
+   81          | . definicionFuncion
+   82 sentenciaExpresion: . ';'
+   83                   | . expresion ';'
+   84 $@1: .  [IF]
+   85 sentenciaSeleccion: . $@1 IF '(' expresion ')' sentencia ELSE sentencia
+   85                   | $@1 IF '(' expresion ')' . sentencia ELSE sentencia
+   86 $@2: .  [IF]
+   87 sentenciaSeleccion: . $@2 IF '(' expresion ')' sentencia
+   88 $@3: .  [WHILE]
+   89 sentenciaIteracion: . $@3 WHILE '(' expresion ')' sentencia
+   90 $@4: .  [DO]
+   91 sentenciaIteracion: . $@4 DO sentencia WHILE '(' expresion ')' ';'
+   92 $@5: .  [FOR]
+   93 sentenciaIteracion: . $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+   94 sentenciaSalto: . RETURN expresion ';'
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    TIPOS_DE_DATOS  desplazar e ir al estado 7
+    VOID            desplazar e ir al estado 8
+    RETURN          desplazar e ir al estado 9
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+    '{'             desplazar e ir al estado 15
+    ';'             desplazar e ir al estado 17
+
+    IF        reduce usando la regla 84 ($@1)
+    IF        [reduce usando la regla 86 ($@2)]
+    DO        reduce usando la regla 90 ($@4)
+    WHILE     reduce usando la regla 88 ($@3)
+    FOR       reduce usando la regla 92 ($@5)
+    $default  reduce usando la regla 84 ($@1)
+
+    expresion                ir al estado 19
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+    declaracion              ir al estado 32
+    declaracionFuncion       ir al estado 33
+    definicionFuncion        ir al estado 34
+    declaracionVariable      ir al estado 35
+    declaracionAsignacion    ir al estado 36
+    sentenciaCompuesta       ir al estado 37
+    sentencia                ir al estado 156
+    sentenciaExpresion       ir al estado 39
+    sentenciaSeleccion       ir al estado 40
+    $@1                      ir al estado 41
+    $@2                      ir al estado 42
+    sentenciaIteracion       ir al estado 43
+    $@3                      ir al estado 44
+    $@4                      ir al estado 45
+    $@5                      ir al estado 46
+    sentenciaSalto           ir al estado 47
+
+
+estado 149
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   53 declaracion: . declaracionVariable ';'
+   54            | . declaracionAsignacion ';'
+   55            | . declaracionFuncion ';'
+   56 declaracionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')'
+   57                   | . VOID IDENTIFICADOR '(' listaDeParametros ')'
+   58 definicionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   59                  | . VOID IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   64 declaracionVariable: . TIPOS_DE_DATOS listaDeVariables
+   65 declaracionAsignacion: . TIPOS_DE_DATOS listaDeVariablesAsignacion
+   72 sentenciaCompuesta: . '{' listaCompuesta '}'
+   75 sentencia: . sentenciaCompuesta
+   76          | . sentenciaExpresion
+   77          | . sentenciaSeleccion
+   78          | . sentenciaIteracion
+   79          | . sentenciaSalto
+   80          | . declaracion
+   81          | . definicionFuncion
+   82 sentenciaExpresion: . ';'
+   83                   | . expresion ';'
+   84 $@1: .  [IF]
+   85 sentenciaSeleccion: . $@1 IF '(' expresion ')' sentencia ELSE sentencia
+   86 $@2: .  [IF]
+   87 sentenciaSeleccion: . $@2 IF '(' expresion ')' sentencia
+   87                   | $@2 IF '(' expresion ')' . sentencia
+   88 $@3: .  [WHILE]
+   89 sentenciaIteracion: . $@3 WHILE '(' expresion ')' sentencia
+   90 $@4: .  [DO]
+   91 sentenciaIteracion: . $@4 DO sentencia WHILE '(' expresion ')' ';'
+   92 $@5: .  [FOR]
+   93 sentenciaIteracion: . $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+   94 sentenciaSalto: . RETURN expresion ';'
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    TIPOS_DE_DATOS  desplazar e ir al estado 7
+    VOID            desplazar e ir al estado 8
+    RETURN          desplazar e ir al estado 9
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+    '{'             desplazar e ir al estado 15
+    ';'             desplazar e ir al estado 17
+
+    IF        reduce usando la regla 84 ($@1)
+    IF        [reduce usando la regla 86 ($@2)]
+    DO        reduce usando la regla 90 ($@4)
+    WHILE     reduce usando la regla 88 ($@3)
+    FOR       reduce usando la regla 92 ($@5)
+    $default  reduce usando la regla 84 ($@1)
+
+    expresion                ir al estado 19
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+    declaracion              ir al estado 32
+    declaracionFuncion       ir al estado 33
+    definicionFuncion        ir al estado 34
+    declaracionVariable      ir al estado 35
+    declaracionAsignacion    ir al estado 36
+    sentenciaCompuesta       ir al estado 37
+    sentencia                ir al estado 157
+    sentenciaExpresion       ir al estado 39
+    sentenciaSeleccion       ir al estado 40
+    $@1                      ir al estado 41
+    $@2                      ir al estado 42
+    sentenciaIteracion       ir al estado 43
+    $@3                      ir al estado 44
+    $@4                      ir al estado 45
+    $@5                      ir al estado 46
+    sentenciaSalto           ir al estado 47
+
+
+estado 150
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   53 declaracion: . declaracionVariable ';'
+   54            | . declaracionAsignacion ';'
+   55            | . declaracionFuncion ';'
+   56 declaracionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')'
+   57                   | . VOID IDENTIFICADOR '(' listaDeParametros ')'
+   58 definicionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   59                  | . VOID IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   64 declaracionVariable: . TIPOS_DE_DATOS listaDeVariables
+   65 declaracionAsignacion: . TIPOS_DE_DATOS listaDeVariablesAsignacion
+   72 sentenciaCompuesta: . '{' listaCompuesta '}'
+   75 sentencia: . sentenciaCompuesta
+   76          | . sentenciaExpresion
+   77          | . sentenciaSeleccion
+   78          | . sentenciaIteracion
+   79          | . sentenciaSalto
+   80          | . declaracion
+   81          | . definicionFuncion
+   82 sentenciaExpresion: . ';'
+   83                   | . expresion ';'
+   84 $@1: .  [IF]
+   85 sentenciaSeleccion: . $@1 IF '(' expresion ')' sentencia ELSE sentencia
+   86 $@2: .  [IF]
+   87 sentenciaSeleccion: . $@2 IF '(' expresion ')' sentencia
+   88 $@3: .  [WHILE]
+   89 sentenciaIteracion: . $@3 WHILE '(' expresion ')' sentencia
+   89                   | $@3 WHILE '(' expresion ')' . sentencia
+   90 $@4: .  [DO]
+   91 sentenciaIteracion: . $@4 DO sentencia WHILE '(' expresion ')' ';'
+   92 $@5: .  [FOR]
+   93 sentenciaIteracion: . $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+   94 sentenciaSalto: . RETURN expresion ';'
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    TIPOS_DE_DATOS  desplazar e ir al estado 7
+    VOID            desplazar e ir al estado 8
+    RETURN          desplazar e ir al estado 9
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+    '{'             desplazar e ir al estado 15
+    ';'             desplazar e ir al estado 17
+
+    IF        reduce usando la regla 84 ($@1)
+    IF        [reduce usando la regla 86 ($@2)]
+    DO        reduce usando la regla 90 ($@4)
+    WHILE     reduce usando la regla 88 ($@3)
+    FOR       reduce usando la regla 92 ($@5)
+    $default  reduce usando la regla 84 ($@1)
+
+    expresion                ir al estado 19
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+    declaracion              ir al estado 32
+    declaracionFuncion       ir al estado 33
+    definicionFuncion        ir al estado 34
+    declaracionVariable      ir al estado 35
+    declaracionAsignacion    ir al estado 36
+    sentenciaCompuesta       ir al estado 37
+    sentencia                ir al estado 158
+    sentenciaExpresion       ir al estado 39
+    sentenciaSeleccion       ir al estado 40
+    $@1                      ir al estado 41
+    $@2                      ir al estado 42
+    sentenciaIteracion       ir al estado 43
+    $@3                      ir al estado 44
+    $@4                      ir al estado 45
+    $@5                      ir al estado 46
+    sentenciaSalto           ir al estado 47
+
+
+estado 151
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   91 sentenciaIteracion: $@4 DO sentencia WHILE '(' . expresion ')' ';'
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    expresion                ir al estado 159
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+
+
+estado 152
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   93 sentenciaIteracion: $@5 FOR '(' expresionOP ';' . expresionOP ';' expresionOP ')' sentenciaCompuesta
+   95 expresionOP: .  [';']
+   96            | . expresion
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    $default  reduce usando la regla 95 (expresionOP)
+
+    expresion                ir al estado 140
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+    expresionOP              ir al estado 160
+
+
+estado 153
+
+   62 listaDeParametros: listaDeParametros ',' parametro .
+
+    $default  reduce usando la regla 62 (listaDeParametros)
+
+
+estado 154
+
+   58 definicionFuncion: TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta .
+
+    $default  reduce usando la regla 58 (definicionFuncion)
+
+
+estado 155
+
+   59 definicionFuncion: VOID IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta .
+
+    $default  reduce usando la regla 59 (definicionFuncion)
+
+
+estado 156
+
+   85 sentenciaSeleccion: $@1 IF '(' expresion ')' sentencia . ELSE sentencia
+
+    ELSE  desplazar e ir al estado 161
+
+
+estado 157
+
+   87 sentenciaSeleccion: $@2 IF '(' expresion ')' sentencia .
+
+    $default  reduce usando la regla 87 (sentenciaSeleccion)
+
+
+estado 158
+
+   89 sentenciaIteracion: $@3 WHILE '(' expresion ')' sentencia .
+
+    $default  reduce usando la regla 89 (sentenciaIteracion)
+
+
+estado 159
+
+   91 sentenciaIteracion: $@4 DO sentencia WHILE '(' expresion . ')' ';'
+
+    ')'  desplazar e ir al estado 162
+
+
+estado 160
+
+   93 sentenciaIteracion: $@5 FOR '(' expresionOP ';' expresionOP . ';' expresionOP ')' sentenciaCompuesta
+
+    ';'  desplazar e ir al estado 163
+
+
+estado 161
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   53 declaracion: . declaracionVariable ';'
+   54            | . declaracionAsignacion ';'
+   55            | . declaracionFuncion ';'
+   56 declaracionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')'
+   57                   | . VOID IDENTIFICADOR '(' listaDeParametros ')'
+   58 definicionFuncion: . TIPOS_DE_DATOS IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   59                  | . VOID IDENTIFICADOR '(' listaDeParametros ')' sentenciaCompuesta
+   64 declaracionVariable: . TIPOS_DE_DATOS listaDeVariables
+   65 declaracionAsignacion: . TIPOS_DE_DATOS listaDeVariablesAsignacion
+   72 sentenciaCompuesta: . '{' listaCompuesta '}'
+   75 sentencia: . sentenciaCompuesta
+   76          | . sentenciaExpresion
+   77          | . sentenciaSeleccion
+   78          | . sentenciaIteracion
+   79          | . sentenciaSalto
+   80          | . declaracion
+   81          | . definicionFuncion
+   82 sentenciaExpresion: . ';'
+   83                   | . expresion ';'
+   84 $@1: .  [IF]
+   85 sentenciaSeleccion: . $@1 IF '(' expresion ')' sentencia ELSE sentencia
+   85                   | $@1 IF '(' expresion ')' sentencia ELSE . sentencia
+   86 $@2: .  [IF]
+   87 sentenciaSeleccion: . $@2 IF '(' expresion ')' sentencia
+   88 $@3: .  [WHILE]
+   89 sentenciaIteracion: . $@3 WHILE '(' expresion ')' sentencia
+   90 $@4: .  [DO]
+   91 sentenciaIteracion: . $@4 DO sentencia WHILE '(' expresion ')' ';'
+   92 $@5: .  [FOR]
+   93 sentenciaIteracion: . $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta
+   94 sentenciaSalto: . RETURN expresion ';'
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    TIPOS_DE_DATOS  desplazar e ir al estado 7
+    VOID            desplazar e ir al estado 8
+    RETURN          desplazar e ir al estado 9
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+    '{'             desplazar e ir al estado 15
+    ';'             desplazar e ir al estado 17
+
+    IF        reduce usando la regla 84 ($@1)
+    IF        [reduce usando la regla 86 ($@2)]
+    DO        reduce usando la regla 90 ($@4)
+    WHILE     reduce usando la regla 88 ($@3)
+    FOR       reduce usando la regla 92 ($@5)
+    $default  reduce usando la regla 84 ($@1)
+
+    expresion                ir al estado 19
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+    declaracion              ir al estado 32
+    declaracionFuncion       ir al estado 33
+    definicionFuncion        ir al estado 34
+    declaracionVariable      ir al estado 35
+    declaracionAsignacion    ir al estado 36
+    sentenciaCompuesta       ir al estado 37
+    sentencia                ir al estado 164
+    sentenciaExpresion       ir al estado 39
+    sentenciaSeleccion       ir al estado 40
+    $@1                      ir al estado 41
+    $@2                      ir al estado 42
+    sentenciaIteracion       ir al estado 43
+    $@3                      ir al estado 44
+    $@4                      ir al estado 45
+    $@5                      ir al estado 46
+    sentenciaSalto           ir al estado 47
+
+
+estado 162
+
+   91 sentenciaIteracion: $@4 DO sentencia WHILE '(' expresion ')' . ';'
+
+    ';'  desplazar e ir al estado 165
+
+
+estado 163
+
+    8 expresion: . expresionAsignacion
+    9 expresionAsignacion: . expresionCondicional
+   10                    | . expresionUnaria operacionAsignacion expresionAsignacion
+   14 expresionCondicional: . expresionOr
+   15                     | . expresionOr '?' expresion ':' expresion
+   16 expresionOr: . expresionAnd
+   17            | . expresionOr OR expresionAnd
+   18 expresionAnd: . expresionIgualdad
+   19             | . expresionAnd AND expresionIgualdad
+   20 expresionIgualdad: . expresionRelacional
+   21                  | . expresionIgualdad operadorComparacion expresionRelacional
+   23 expresionRelacional: . expresionAditiva
+   24                    | . expresionRelacional operadorRelacional expresionAditiva
+   29 expresionAditiva: . expresionMultiplicativa
+   30                 | . expresionAditiva '+' expresionMultiplicativa
+   31                 | . expresionAditiva '-' expresionMultiplicativa
+   32 expresionMultiplicativa: . expresionUnaria
+   33                        | . expresionMultiplicativa '*' expresionUnaria
+   34                        | . expresionMultiplicativa '/' expresionUnaria
+   35 expresionUnaria: . expresionPostfijo
+   36                | . expresionUnaria INCREMENTO
+   37                | . expresionUnaria DECREMENTO
+   38                | . operadorUnario expresionUnaria
+   39                | . '-' expresionUnaria
+   40                | . '+' expresionUnaria
+   41                | . '*' expresionUnaria
+   42 operadorUnario: . '&'
+   43               | . '!'
+   44 expresionPostfijo: . expresionPrimaria
+   45                  | . expresionPostfijo '[' expresion ']'
+   46                  | . expresionPostfijo '(' listaDeArgumentos ')'
+   50 expresionPrimaria: . CONSTANTES
+   51                  | . IDENTIFICADOR
+   52                  | . LITERAL_CADENA
+   93 sentenciaIteracion: $@5 FOR '(' expresionOP ';' expresionOP ';' . expresionOP ')' sentenciaCompuesta
+   95 expresionOP: .  [')']
+   96            | . expresion
+
+    CONSTANTES      desplazar e ir al estado 4
+    LITERAL_CADENA  desplazar e ir al estado 5
+    IDENTIFICADOR   desplazar e ir al estado 6
+    '*'             desplazar e ir al estado 10
+    '+'             desplazar e ir al estado 11
+    '-'             desplazar e ir al estado 12
+    '&'             desplazar e ir al estado 13
+    '!'             desplazar e ir al estado 14
+
+    $default  reduce usando la regla 95 (expresionOP)
+
+    expresion                ir al estado 140
+    expresionAsignacion      ir al estado 20
+    expresionCondicional     ir al estado 21
+    expresionOr              ir al estado 22
+    expresionAnd             ir al estado 23
+    expresionIgualdad        ir al estado 24
+    expresionRelacional      ir al estado 25
+    expresionAditiva         ir al estado 26
+    expresionMultiplicativa  ir al estado 27
+    expresionUnaria          ir al estado 28
+    operadorUnario           ir al estado 29
+    expresionPostfijo        ir al estado 30
+    expresionPrimaria        ir al estado 31
+    expresionOP              ir al estado 166
+
+
+estado 164
+
+   85 sentenciaSeleccion: $@1 IF '(' expresion ')' sentencia ELSE sentencia .
+
+    $default  reduce usando la regla 85 (sentenciaSeleccion)
+
+
+estado 165
+
+   91 sentenciaIteracion: $@4 DO sentencia WHILE '(' expresion ')' ';' .
+
+    $default  reduce usando la regla 91 (sentenciaIteracion)
+
+
+estado 166
+
+   93 sentenciaIteracion: $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP . ')' sentenciaCompuesta
+
+    ')'  desplazar e ir al estado 167
+
+
+estado 167
+
+   72 sentenciaCompuesta: . '{' listaCompuesta '}'
+   93 sentenciaIteracion: $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' . sentenciaCompuesta
+
+    '{'  desplazar e ir al estado 15
+
+    sentenciaCompuesta  ir al estado 168
+
+
+estado 168
+
+   93 sentenciaIteracion: $@5 FOR '(' expresionOP ';' expresionOP ';' expresionOP ')' sentenciaCompuesta .
+
+    $default  reduce usando la regla 93 (sentenciaIteracion)

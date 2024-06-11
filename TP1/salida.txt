@@ -1,0 +1,26 @@
+λ                       NO RECONOCIDA 
+λ                       NO RECONOCIDA 
+0w                      NO RECONOCIDA 
+λ                       NO RECONOCIDA 
+234                     DECIMAL 
+12244323                DECIMAL 
+λ                       NO RECONOCIDA 
+0                       OCTAL 
+007                     OCTAL 
+λ                       NO RECONOCIDA 
+λ                       NO RECONOCIDA 
+λ                       NO RECONOCIDA 
+λ                       NO RECONOCIDA 
+λ                       NO RECONOCIDA 
+λ                       NO RECONOCIDA 
+009                     NO RECONOCIDA 
+0XXXXX2                 NO RECONOCIDA 
+177770.12h12y           NO RECONOCIDA 
+0x12E                   HEXADECIMAL 
+01                      OCTAL 
+λ                       NO RECONOCIDA 
+khjdsfbgkjfdbg          NO RECONOCIDA 
+λ                       NO RECONOCIDA 
+λ                       NO RECONOCIDA 
+λ                       NO RECONOCIDA 
+λ                       NO RECONOCIDA 
